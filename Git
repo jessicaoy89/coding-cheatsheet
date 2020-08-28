@@ -1,0 +1,10 @@
+Git operations:
+	“git clone “ + httpWebsite from GitHub [copy to local disk]
+	“ls” [to check out the files in the copied location]
+	“cd ” + folder name [go to the folder of the copied material]
+	“clear” [remove the previous commands]
+	“touch “ + file name [create new files, e.g. file1.md or pythonstuff.py]
+	“git add *” [add all the created files to the git local]
+	“git status” [check status of the git location]
+	“git commit -m " + a sentence (e.g. ‘adding files’) [describe the action]
+	“git push” [will add the created files to remote GitHub account]
