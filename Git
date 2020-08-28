@@ -1,10 +1,101 @@
-Git operations:
-	“git clone “ + httpWebsite from GitHub [copy to local disk]
-	“ls” [to check out the files in the copied location]
-	“cd ” + folder name [go to the folder of the copied material]
-	“clear” [remove the previous commands]
-	“touch “ + file name [create new files, e.g. file1.md or pythonstuff.py]
-	“git add *” [add all the created files to the git local]
-	“git status” [check status of the git location]
-	“git commit -m " + a sentence (e.g. ‘adding files’) [describe the action]
-	“git push” [will add the created files to remote GitHub account]
+A. Git(Bash) basic operations:
+	"git clone " + httpWebsite from GitHub [copy to local disk]
+	"ls" [to check out the files in the copied location]
+	"ls -a" [to check out all the files, including hidden ones]
+	"cd " + folder name [go to the folder of the copied material]
+	"clear" [remove the previous commands]
+	"touch " + file name [create new files, e.g. file1.md or pythonstuff.py]
+	"git add *" [add all the created files to the git local]
+	"git status" [check status of the current git location]
+	"git commit -m " + a sentence (e.g. ‘adding files’) [describe the action]
+	"git push: [will add the created files to remote GitHub account]
+
+B. Git configuration:
+	# sets up Git with your name
+	git config --global user.name "<Your-Full-Name>"
+
+	# sets up Git with your email
+	git config --global user.email "<your-email-address>"
+
+	# makes sure that Git output is colored
+	git config --global color.ui auto
+
+	# displays the original state in a conflict
+	git config --global merge.conflictstyle diff3
+
+	git config --list
+	
+C. Version Control with Git:
+	1. Git setup: configure location, user, editor
+	2. Create a Git repo: 
+		“git init” [initialize an empty git repository]
+	3. Review a Repo’s history: 
+		"git status" [review repos]
+		“git log” [use “q” to quit the log screen]
+		“git log <SHA-code>”
+		“git log —-oneline” [view git log of each commit in one line]
+		“git log —-stat” [list the files were changed and the number of added/removed lines]
+		“git log -p” [or “git log —-patch”, view the actual change happened in the file]
+		“git log -w” [ignores the whitespace changes]
+		"git log --author=NAME" [filter commits by author] [other e.g. git log --author="Richard Kalehoff"]
+		"git log --grep=bug" or "git log --grep bug" [filter down to just the commits that reference the word "bug"] [other e.g. git log --grep="border radius issue in Safari"]
+		"git shortlog" [display all commits sorted by author]
+		"git shortlog -s -n" [-s to show just the number of commits (rather than each commit's message) and -n to sort them numerically (rather than alphabetically by author name)]
+		“git show <SHA-code>” [shows only one commit]
+	4. Add commits to a Repo:
+		“git add (file name)”
+		“git add .” [stage the remaining files in the directory]
+		“git rm —-cached (file name)” [to remove the one accidentally added]
+		“git commit” [edit commit in the editor to record each commit action, then close the ]
+		“git commit -m “***(words of what it is)”” [add text of commit without opening the editor]
+		“git diff” [check to see what changes happen to the commit]
+		.gitignore ???
+	5. Tagging:
+		“git tag -a version1.0 <SHA-code>” [add an annotated flag to a commit]
+		“git tag” [verify the tags in the repository]
+		“git tag -d version1.0” [delete a tag]
+		“git tag —-delete version1.0” [delete a tag]
+		“git log —-decorate” [show the flag changes, HEAD, master, tags]
+		“git log —-oneline —-decorate”
+	6. Branching:
+		“git branch” [list all branches in the repository]
+		“git branch (branch name)” [create a new branch]
+		“git branch (branch name) <SHA-code>” [create a branch name for a commit]
+		“git checkout (branch name)” [switch to work on certain branch]
+		“git checkout -b (branch name)” [create a branch and switch to it in one commmand]
+		“git checkout -b (branch name) master” [create a new branch and have it start at the same location as the master branch]
+		“git branch -d (branch name)” [delete a branch]
+		“git branch -D (branch name)” [delete the active branch]
+		“git log —-oneline —-decorate —-graph —-all” [show all the branching and commit events effectively in the repository]
+	7. Merging:
+		*** fast-forward merge or regular merge
+		“git merge (branch name)” [merge the active branch to the chosen branch]
+		*** merge conflicts when different branches edits the same locations
+	8. Undoing changes:
+		“git commit --amend” [alter the most recent commit]
+		“git revert <SHA-code>” [reverse a previously made commit]
+		“git reset” [might erase commits]
+		“git reset —-mixed HEAD^” [unstage the previous branch]
+		“git reset —-soft HEAD^” [uncommit the previous branch]
+		“git reset —-hard HEAD^” [take the changes made in the branch commit and erase them]
+		^ [the parent commit]
+		~ [the first parent commit]
+
+D. Remote with Git:
+	git remote [to manage a remote repository]
+	git remote add origin *****.git [to add a connection to a new remote repository]
+	git remote set-url origin *****.git [to change remote origin to a different url address]
+	git remote -v [to see the details about a connection to a remote]
+	git clone *****.git 
+	git branch
+	git checkout master
+	git branch -m new_branch_name
+	git init
+	git add .
+	git push <remote-shortname> <branch> [to send local commits to a remote repository] [e.g. git push origin master]
+	git push -u origin new_branch_name
+	git pull [to sync the local repository with remote repository, automatically merge the local branch with the tracking branch] [e.g. git pull origin master]
+	git fetch [the commit(s) on the remote branch are copied to the local repository, the local tracking branch (e.g. origin/master) is moved to point to the most recent commit] [e.g. git fetch origin master]
+	
+	resources1: https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes#_showing_your_remotes
+	resources2: https://git-scm.com/docs/git-remote
