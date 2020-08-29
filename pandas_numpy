@@ -1,0 +1,254 @@
+#########################################################
+# Numpy - core library for scientific computing in python, high performance multidimensional array object & tools for working with arrays
+import numpy as np
+
+#=============================#
+# Creating arrays (a - 1d, b - 2d, c - 3d)
+a = np.array([1, 2, 3])
+b = np.array([(1.5, 2, 3), (4, 5, 6)], dtype = float)
+c = np.array([[(1.5, 2, 3), (4, 5, 6)], [(3, 2, 1), (4, 5, 6)]], dtype = float)
+
+# Initialize placeholders
+np.zeros((3, 4))
+np.ones((2, 3, 4), dtype = np.int16)
+
+d = np.arange(10, 25, 5) 		# an array of evenly spaced values (step value)
+np.linspace(0, 2, 9) 			# an array of evenly spaced values (number of samples)
+
+e = np.full((2,2), 7) 			# a constant array
+f = np.eye(2) 					# a 2x2 identity matrix
+
+np.random.random((2,2)) 		# an array with random values
+np.empty((3,2))
+
+#=============================#
+# Inspecting array
+a.shape     	# array dimensions
+len(a)
+b.ndim      	# number of array dimensions
+e.size      	# number of array elements
+b.dtype     	# datatype of array elements
+b.dtype.name 	# name of datatype
+b.astype(int)	# convert to a different type
+
+#=============================#
+# Mathmatics
+g = a - b	
+np.subtract(a,b)
+
+a + b
+np.add(a,b)
+
+a / b
+np.divide(a,b)
+
+a * b
+np.multiply(a,b)
+
+np.exp(b)
+np.sqrt(b)
+np.sin(a)
+np.cos(b)
+np.log(a)
+e.dot(f)		# dot product
+
+np.array_equal(a,b)		# array-wise comparison
+a == b					# element-wise comparison
+
+a.sum()
+a.min()
+b.max(axis = 0)
+b.cumsum(axis = 1)		# cumulative sum of the elements
+a.mean()
+a.median()
+a.corrcoef()			# correlation coefficient
+np.std(b)
+
+#=============================#
+# Array Manipulation
+
+# Copy arrays
+h = a.view()
+np.copy(a)
+h = a.copy()	# deep copy of the array
+
+# Sort arrays
+a.sort()
+c.sort(axis=0)
+
+# Selecting
+a[2]
+b[1,2]
+a[0:2]			# select index 0 and 1
+b[0:2, 1]
+b[:1]			# select all elements at row 0 == b[0:1, :]
+c[1, ...]		# == [1, :, :]
+a[: :-1]		# reverse array a
+a[a<2]			# boolean indexing
+
+# Changing
+i = np.transpose(b)		# permute array dimensions
+i.T						# permute array dimensions
+g.reshape(3, -2)		# reshape but no change of data
+
+h.resize((2,6))			# return a new array with shape(2,6)
+np.append(h,g)			
+np.insert(a, 1, 5)		# insert in an array
+np.delete(a, [1])		
+
+np.concatenate((a,d), axis=0)	
+np.vstack((a,b))
+np.hstack((a,b))
+np.column_stack((a,b))
+
+np.hsplit(a,3)
+np.vsplit(c,2)
+
+#########################################################
+# Pandas - built on NumPy and provides easy-to-use data structures and data analysis tools for python
+import pandas as pd
+
+#=============================#
+# Data structures
+# series: 1d labeled array capable of holding any data type
+s = pd.Series([3, -5, 7, 4], index=['a', 'b', 'c', 'd'])
+
+# dataframe
+data = {'Country': ['Belgium', 'US', 'Brazil'],
+		'Capital': ['Brussels', 'Washington DC', 'Brasilia'],
+		'Num': [1111, 1112, 1113]}
+df = pd.DataFrame(data, columns=['Country', 'Capital', 'Num'])
+
+df2 = pd.DataFrame(
+		[[4, 7, 10],
+		 [5, 8, 11],
+		 [6, 9, 12]],
+		index=[1, 2, 3],
+		columns=['a', 'b', 'c'])
+
+#=============================#
+# Basic info
+df.shape
+df.index
+df.columns
+df.info()		# info on DataFrame
+df.count()		# number of non-NA values
+df.sum()
+df.cumsum()
+df.min()/df.max()
+df.idxmin()/df.idxmax()
+df.describe()
+df.mean()
+df.median()
+df['col'].value_counts()
+df['col'].nunique()
+
+#=============================#
+# read & write to csv
+pd.read_csv('file.csv', header=None, nrows=5)
+df.to_csv('newDataFrame.csv')
+
+# read & write to SQL Query or Database Table
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///:memory:')
+pd.read_sql("SELECT * FROM my_table;", engine)
+pd.read_sql_table('my_table', engine)
+pd.read_sql_query("SELECT * FROM my_table;", engine)
+
+df.to_sql('myDf', engine)
+
+#=============================#
+# Selection
+s['b']					# get one element
+df[1:]					# get subset of a DataFrame
+
+df.iloc[[0], [0]]
+df.iat([0], [0])
+
+df.loc[[0], ['Country']]
+df.at([0], ['Country'])
+
+df.ix[2]
+df.ix[:, 'Capital']
+
+#=============================#
+# Filtering
+s[~(s > 1) | (s < -1)]
+df[df.Country.isin(pd.Series)]
+df[df[col] > 0.5] 							# Rows where the col column is greater than 0.5
+df[(df[col] > 0.5) & (df[col] < 0.7)] 		# Rows where 0.5 < col < 0.7
+df.sort_index()								# sort by labels along an axis
+df.sort_values(by='Country')				# sort by values along an axis
+df.rank()
+df.sort_values(col1) 						# Sorts values by col1 in ascending order
+df.sort_values(col2,ascending=False) 		# Sorts values by col2 in descending order
+df.sort_values([col1,col2], ascending=[True,False]) # Sorts values by col1 in ascending order then col2 in descending order
+df.groupby(col) 							# Returns a groupby object for values from one column
+df.groupby([col1,col2]) 					# Returns a groupby object values from multiple columns
+df.groupby(col1)[col2].mean() 				# Returns the mean of the values in col2, grouped by the values in col1 (mean can be replaced with almost any function from the statistics section)
+df.pivot_table(index=col1, values= col2,col3], aggfunc=mean) # Creates a pivot table that groups by col1 and calculates the mean of col2 and col3
+df.groupby(col1).agg(np.mean) 				# Finds the average across all columns for every unique column 1 group
+
+#=============================#
+# Function
+df.apply(np.mean) 							# Applies a function across each column
+df.apply(np.max, axis=1) 					# Applies a function across each row
+f = lambda x: x*2
+df.apply(f)									# apply function
+df.applymap(f)								# apply function element-wise
+
+# Function2
+df = pd.DataFrame({
+    'name': ['alice smith','bob jones','charlie joneson','daisy white'],
+    'age': [25,20,30,35]
+})
+
+# a function that takes the value and returns
+# a series with as many columns as you want
+def split_name(name):
+    first_name, last_name = name.split(' ')
+
+    return pd.Series({
+        'first_name': first_name,
+        'last_name': last_name
+    })
+
+# df_new has the new columns
+df_new = df['name'].apply(split_name)
+
+# append the columns to the original dataframe
+df_final = pd.concat([df,df_new],axis=1)
+
+#=============================#
+# Manipulation
+df.columns = ['a','b','c'] # Renames columns
+pd.isnull() # Checks for null Values, Returns Boolean Array
+pd.notnull() # Opposite of s.isnull()
+df.dropna() # Drops all rows that contain null values
+df.dropna(axis=1) # Drops all columns that contain null values
+df.dropna(axis=1,thresh=n) # Drops all rows have have less than n non null values
+df.fillna(x) # Replaces all null values with x
+s.fillna(s.mean()) # Replaces all null values with the mean (mean can be replaced with almost any function from the statistics section)
+s.astype(float) # Converts the datatype of the series to float
+s.replace(1,'one') # Replaces all values equal to 1 with 'one'
+s.replace([1,3],['one','three']) # Replaces all 1 with 'one' and 3 with 'three'
+df.rename(columns=lambda x: x + 1) # Mass renaming of columns
+df.rename(columns={'old_name': 'new_ name'}) # Selective renaming
+df.set_index('column_one') # Changes the index
+df.rename(index=lambda x: x + 1) # Mass renaming of index
+s.drop(['a', 'c'])			# drop values from rows (axis=0)
+
+s3 = pd.Series([7, -2, 3], index=['a', 'c', 'd'])
+s + s3 
+	a	10.0
+	b	NaN
+	c	5.0
+	d	7.0
+s.add() .sub() .div() .mul()
+
+#=============================#
+# Joining and combining
+
+df1.append(df2) # Adds the rows in df1 to the end of df2 (columns should be identical)
+pd.concat([df1, df2],axis=1) # Adds the columns in df1 to the end of df2 (rows should be identical)
+df1.join(df2,on=col1,how='inner') # SQL-style joins the columns in df1 with the columns on df2 where the rows for col have identical values. how can be one of 'left', 'right', 'outer', 'inner'
